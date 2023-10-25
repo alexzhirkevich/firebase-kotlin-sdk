@@ -32,6 +32,9 @@ buildscript {
 val targetSdkVersion by extra(32)
 val minSdkVersion by extra(19)
 
+val supportIosTarget = project.property("skipIosTarget") != "true"
+
+
 tasks {
     val updateVersions by registering {
         dependsOn(
@@ -50,6 +53,17 @@ tasks {
 }
 
 subprojects {
+
+    if (!supportIosTarget) {
+        runCatching {
+            tasks.withType<org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask>() {
+                enabled = false
+            }
+            tasks.withType<org.jetbrains.kotlin.gradle.tasks.PodspecTask>() {
+                enabled = false
+            }
+        }
+    }
 
     group = "dev.gitlive"
 
@@ -107,27 +121,29 @@ subprojects {
     afterEvaluate  {
 
         dependencies {
-            "commonMainImplementation"("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-            "androidMainImplementation"("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
-            "androidMainImplementation"(platform("com.google.firebase:firebase-bom:31.4.0"))
-            "commonTestImplementation"(kotlin("test-common"))
-            "commonTestImplementation"(kotlin("test-annotations-common"))
-            "commonTestImplementation"("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-            "commonTestImplementation"("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-            if (this@afterEvaluate.name != "firebase-crashlytics") {
-                "jvmMainApi"("dev.gitlive:firebase-java-sdk:0.1.1")
-                "jvmMainApi"("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0") {
-                    exclude("com.google.android.gms")
+            runCatching {
+                "commonMainImplementation"("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                "androidMainImplementation"("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+                "androidMainImplementation"(platform("com.google.firebase:firebase-bom:31.4.0"))
+                "commonTestImplementation"(kotlin("test-common"))
+                "commonTestImplementation"(kotlin("test-annotations-common"))
+                "commonTestImplementation"("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                "commonTestImplementation"("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+                if (this@afterEvaluate.name != "firebase-crashlytics") {
+//                "jvmMainApi"("dev.gitlive:firebase-java-sdk:0.1.1")
+//                "jvmMainApi"("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0") {
+//                    exclude("com.google.android.gms")
+//                }
+                    "jsTestImplementation"(kotlin("test-js"))
+                    "jvmTestImplementation"(kotlin("test-junit"))
+                    "jvmTestImplementation"("junit:junit:4.13.2")
                 }
-                "jsTestImplementation"(kotlin("test-js"))
-                "jvmTestImplementation"(kotlin("test-junit"))
-                "jvmTestImplementation"("junit:junit:4.13.2")
+                "androidAndroidTestImplementation"(kotlin("test-junit"))
+                "androidAndroidTestImplementation"("junit:junit:4.13.2")
+                "androidAndroidTestImplementation"("androidx.test:core:1.4.0")
+                "androidAndroidTestImplementation"("androidx.test.ext:junit:1.1.3")
+                "androidAndroidTestImplementation"("androidx.test:runner:1.4.0")
             }
-            "androidAndroidTestImplementation"(kotlin("test-junit"))
-            "androidAndroidTestImplementation"("junit:junit:4.13.2")
-            "androidAndroidTestImplementation"("androidx.test:core:1.4.0")
-            "androidAndroidTestImplementation"("androidx.test.ext:junit:1.1.3")
-            "androidAndroidTestImplementation"("androidx.test:runner:1.4.0")
         }
     }
 

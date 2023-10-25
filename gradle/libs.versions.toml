@@ -1,0 +1,24 @@
+[versions]
+kotlin="1.8.20"
+serialization="1.6.0"
+serializationPlugin="1.8.0"
+ktor="2.3.5"
+androidGradlePlugin = "8.1.1"
+
+[libraries]
+ktor-core = { module  = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-negotiation = { module  = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-negotiationjson = { module  = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-negotiationprotobuf = { module  = "io.ktor:ktor-serialization-kotlinx-protobuf", version.ref = "ktor" }
+ktor-auth = { module  = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktor-engine-java = { module  = "io.ktor:ktor-client-java", version.ref = "ktor" }
+ktor-logging = { module  = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-websocket = { module  = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
+serialization =  { module  = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+
+[plugins]
+kotlin-multiplatform = { id ="org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+serialization =  { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serializationPlugin" }

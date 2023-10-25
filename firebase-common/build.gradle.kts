@@ -41,6 +41,8 @@ android {
     }
 }
 
+val supportIosTarget = project.property("skipIosTarget") != "true"
+
 kotlin {
 
     android {
@@ -60,7 +62,6 @@ kotlin {
         }
     }
 
-    val supportIosTarget = project.property("skipIosTarget") != "true"
 
     if (supportIosTarget) {
         ios()
@@ -131,15 +132,26 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
-            kotlin.srcDir("src/androidMain/kotlin")
-        }
+        val jvmMain by getting
 
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
             }
             kotlin.srcDir("src/androidAndroidTest/kotlin")
+        }
+
+        val restMain by creating {
+            dependsOn(commonMain)
+            jvmMain.dependsOn(this)
+            dependencies {
+                implementation(libs.ktor.core)
+                implementation(libs.serialization)
+                implementation(libs.ktor.negotiation)
+                implementation(libs.ktor.negotiationjson)
+                implementation(libs.ktor.auth)
+                implementation(libs.ktor.logging)
+            }
         }
     }
 }

@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.tasks.DummyFrameworkTask
+import org.jetbrains.kotlin.gradle.tasks.PodspecTask
+
 /*
  * Copyright (c) 2020 GitLive Ltd.  Use of this source code is governed by the Apache 2.0 license.
  */
@@ -113,9 +116,7 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
-            kotlin.srcDir("src/androidMain/kotlin")
-        }
+        val jvmMain by getting
 
         if (supportIosTarget) {
             val iosMain by getting
@@ -127,6 +128,14 @@ kotlin {
         }
 
         val jsMain by getting
+
+        val restMain by creating {
+            dependsOn(commonMain)
+            jvmMain.dependsOn(this)
+            dependencies {
+                implementation(libs.ktor.core)
+            }
+        }
     }
 }
 
