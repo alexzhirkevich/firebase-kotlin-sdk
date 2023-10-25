@@ -7,10 +7,12 @@ import org.jetbrains.kotlin.konan.target.KonanTarget
 
 version = project.property("firebase-auth.version") as String
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("com.android.library")
     kotlin("multiplatform")
     kotlin("native.cocoapods")
+    alias(libs.plugins.serialization)
     //id("com.quittle.android-emulator") version "0.2.0"
 }
 
@@ -140,8 +142,19 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
-            kotlin.srcDir("src/androidMain/kotlin")
+        val jvmMain by getting
+
+        val restMain by creating {
+            dependsOn(commonMain)
+            jvmMain.dependsOn(this)
+            dependencies {
+                implementation(libs.ktor.core)
+                implementation(libs.serialization)
+                implementation(libs.ktor.negotiation)
+                implementation(libs.ktor.negotiationjson)
+                implementation(libs.ktor.auth)
+                implementation(libs.ktor.logging)
+            }
         }
 
         if (supportIosTarget) {
