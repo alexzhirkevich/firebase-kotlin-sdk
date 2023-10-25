@@ -128,10 +128,7 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
-            kotlin.srcDir("src/androidMain/kotlin")
-        }
-
+        val jvmMain by getting
 
         if (supportIosTarget) {
             val iosMain by getting
@@ -143,6 +140,21 @@ kotlin {
         }
 
         val jsMain by getting
+
+        val restMain by creating {
+            dependsOn(commonMain)
+            jvmMain.dependsOn(this)
+            dependencies {
+                implementation(project(":firebase-auth"))
+
+                implementation(libs.ktor.core)
+                implementation(libs.serialization)
+                implementation(libs.ktor.negotiation)
+                implementation(libs.ktor.negotiationjson)
+                implementation(libs.ktor.auth)
+                implementation(libs.ktor.logging)
+            }
+        }
     }
 }
 
