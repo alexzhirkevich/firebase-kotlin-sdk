@@ -4,11 +4,21 @@
 
 version = project.property("firebase-firestore.version") as String
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("com.android.library")
     kotlin("native.cocoapods")
     kotlin("multiplatform")
     kotlin("plugin.serialization") version "1.8.20"
+    alias(libs.plugins.sqldelight)
+}
+
+sqldelight {
+    databases {
+        create("FirestorePersistentStorage") {
+            packageName.set("dev.gitlive.firebase.firestore")
+        }
+    }
 }
 
 android {
@@ -147,12 +157,14 @@ kotlin {
             dependencies {
                 implementation(project(":firebase-auth"))
 
-                implementation(libs.ktor.core)
                 implementation(libs.serialization)
+                implementation(libs.ktor.core)
                 implementation(libs.ktor.negotiation)
                 implementation(libs.ktor.negotiationjson)
                 implementation(libs.ktor.auth)
                 implementation(libs.ktor.logging)
+                implementation(libs.datetime)
+                implementation(libs.sqlidelight.coroutines)
             }
         }
     }

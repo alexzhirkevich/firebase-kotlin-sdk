@@ -1,0 +1,25 @@
+createDocument:
+INSERT INTO CacheDocument(id, path, parentPath, createdAt, updatedAt, lastUsedAt) VALUES (?, ?,?, :createdAt,:createdAt,:createdAt);
+
+setDocumentUpdated:
+UPDATE CacheDocument SET updatedAt = :at = updatedAt, lastUsedAt = :at WHERE id = (SELECT id FROM CacheDocument WHERE path = ?);
+
+setField:
+INSERT INTO CacheDocumentField(idDocument, dataType, key, fieldValue, encodedFieldValue) VALUES (?,?,?,?,?);
+
+getDocument:
+SELECT * FROM CacheDocument f WHERE f.path = ?;
+
+getDocumentFields:
+SELECT * FROM CacheDocumentField f WHERE f.idDocument = (SELECT d.id FROM CacheDocument d WHERE d.path = ?);
+
+deleteDocumentAndFields {
+    DELETE FROM CacheDocumentField WHERE idDocument = (SELECT d.id FROM CacheDocument d WHERE d.path = :path);
+    DELETE FROM CacheDocument WHERE id = (SELECT d.id FROM CacheDocument d WHERE d.path = :path);
+}
+
+deleteDocumentFields:
+    DELETE FROM CacheDocumentField WHERE idDocument = (SELECT d.id FROM CacheDocument d WHERE d.path = ?);
+
+getDocuments:
+SELECT * FROM CacheDocumentField f WHERE (f.idDocument IN (SELECT d.id FROM CacheDocument d WHERE d.parentPath = :path));

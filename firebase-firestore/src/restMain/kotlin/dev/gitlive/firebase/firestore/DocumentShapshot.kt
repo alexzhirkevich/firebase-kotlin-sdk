@@ -17,10 +17,8 @@ actual class DocumentSnapshot(
     actual val id: String,
     actual val reference: DocumentReference,
     private val body : JsonObject,
+    actual val metadata: SnapshotMetadata = SnapshotMetadata(false,false)
 )  {
-
-    actual val metadata: SnapshotMetadata
-        get() = TODO("Not yet implemented")
 
     actual fun <T> get(
         field: String,

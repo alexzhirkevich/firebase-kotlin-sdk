@@ -1,0 +1,8 @@
+CREATE TABLE CacheDocumentField(
+     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+     idDocument TEXT NOT NULL,
+     key TEXT NOT NULL,
+     dataType TEXT NOT NULL,
+     fieldValue TEXT,
+     encodedFieldValue TEXT
+);

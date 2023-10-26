@@ -6,11 +6,13 @@ repositories {
     mavenCentral()
 }
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     kotlin("multiplatform") version "1.8.20" apply false
     kotlin("native.cocoapods") version "1.8.20" apply false
     id("base")
     id("com.github.ben-manes.versions") version "0.42.0"
+    alias(libs.plugins.sqldelight) apply false
 }
 
 buildscript {
